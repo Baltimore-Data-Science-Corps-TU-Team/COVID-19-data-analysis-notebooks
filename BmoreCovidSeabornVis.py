@@ -73,4 +73,4 @@ f.add_legend(loc='center right', bbox_to_anchor=(1.25, 0.5), ncol=2)
 
 plt.show([7,3])
 
-print(df1.head())
+print(df1)
