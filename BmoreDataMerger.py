@@ -51,7 +51,7 @@ df['Zip'] = df['Zip'].astype(int)
 
 #merge with latest covid cases
 df = pd.merge_ordered(zipsLatest,df,fill_method='ffill')
-df = df[['Zip','Neigh','CSA','MHINC','TotalCOVIDCases']]
+df = df[['Neigh','CSA','Zip','MHINC','TotalCOVIDCases']]
 
 #export as CSV
 df.to_csv('MASTER_MERGED.csv',index=False)
