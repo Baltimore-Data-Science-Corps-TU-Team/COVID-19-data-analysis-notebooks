@@ -21,13 +21,13 @@ baltMap = folium.Map(location=[39.2904,-76.6122], tiles='OpenStreetMap', zoom_st
 
 covid_choro = folium.Choropleth(geo_data='zipcode.geojson', geo_path='zipcode.geojson',\
                    data=df, columns=['zipcode1','TotalCOVIDCases'],\
-                       key_on='feature.properties.zipcode1',fill_color='YlGn',fill_opacity=0.8,\
+                       key_on='feature.properties.zipcode1',fill_color='Blues',fill_opacity=0.5,\
                            legend_name='COVID-19 Total Reported Cases').add_to(baltMap)
 
 mhinc_choro = folium.Choropleth(geo_data='Maryland_Baltimore_City_Neighborhoods.geojson',\
                                 geo_path='Maryland_Baltimore_City_Neighborhoods.geojson',data=df,\
                                     columns=['LABEL','MHINC'],\
-                                        key_on='feature.properties.LABEL',fill_color='OrRd',fill_opacity=0.8,\
+                                        key_on='feature.properties.LABEL',fill_color='Reds',fill_opacity=0.5,\
                                             legend_name='Neighborhood Median Household Income').add_to(baltMap)
 
     

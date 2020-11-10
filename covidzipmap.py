@@ -60,4 +60,4 @@ choropleth.geojson.add_child(folium.features.GeoJsonTooltip(['zipcode1','zipname
 
 folium.LayerControl().add_to(baltMap)
 
-baltMap.save('baltChoropleth.html')
+baltMap.save('covidByZipMap.html')
