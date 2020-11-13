@@ -21,7 +21,7 @@ df.columns = df.iloc[0]
 df = df.rename(columns={'Date':'Zip Code'})
 df = df.drop([0,0])
 
-#print(df)  
+print(df)  
 
 df1 = df.loc[:,'2020-04-11':]\
         .diff(axis=1)\
@@ -38,6 +38,7 @@ df1 = pd.melt(df1,id_vars='Zip Code',value_name='cases')
 df1 = df1.rename(columns={0:'Date'})
 df1['cases'] = df1['cases'].astype(int)
 
+print(df1[df1['cases'] < 0])
 df1['cases'] = df1['cases'].clip(lower=0)
 print(df1)
 
