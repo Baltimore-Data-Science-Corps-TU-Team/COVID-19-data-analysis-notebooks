@@ -21,11 +21,12 @@ df.columns = df.iloc[0]
 df = df.rename(columns={'Date':'Zip Code'})
 df = df.drop([0,0])
 
+#print(df)  
 
 df1 = df.loc[:,'2020-04-11':]\
         .diff(axis=1)\
         .drop(columns='2020-04-11')\
-    
+  
 
 dates = df['Zip Code']
 df1.insert(0,'Zip Code',dates)    
@@ -38,9 +39,9 @@ df1 = df1.rename(columns={0:'Date'})
 df1['cases'] = df1['cases'].astype(int)
 
 df1['cases'] = df1['cases'].clip(lower=0)
-print(df1[df1['cases'] < 0])
+print(df1)
 
-#sns.set(rc={'figure.figsize':(30,30)})
+
 g = sns.relplot(x='Date',y='cases',data=df1,kind='line',palette='Spectral')
 g.set(title='Baltimore COVID-19 by Zipcode (Daily New Cases): Mean with 95% C.I.')
 g.set_xticklabels(rotation = 90)
