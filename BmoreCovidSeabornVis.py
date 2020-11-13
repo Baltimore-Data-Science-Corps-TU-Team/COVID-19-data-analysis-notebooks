@@ -63,13 +63,16 @@ df1['cases'] = df1['cases'].astype(int)
 
 g = sns.relplot(x='Date',y='cases',data=df1,kind='line',palette='Spectral')
 g.set(title='Baltimore COVID-19 by Zipcode: Mean with 95% C.I.')
+g.set_xticklabels(rotation = 90)
 
 h = sns.relplot(x='Date',y='cases',data=df1,kind='line',palette='Spectral',ci='sd')
 h.set(title='Baltimore COVID-19 by Zipcode: Mean with Std Dev')
+h.set_xticklabels(rotation = 90)
 
 f = sns.relplot(x='Date',y='cases',data=df1,kind='line',hue='zipcode1',legend='full',palette='Spectral')
 f.set(title='Baltimore City Reported COVID-19 Cases by Zipcode')
 f.add_legend(loc='center right', bbox_to_anchor=(1.25, 0.5), ncol=2)
+f.set_xticklabels(rotation = 90)
 
 plt.show([7,3])
 
