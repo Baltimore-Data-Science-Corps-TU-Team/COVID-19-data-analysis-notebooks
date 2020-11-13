@@ -33,19 +33,20 @@ latestCases['Zip Code'] = latestCases['Zip Code'].map(lambda x : x.rstrip('0').r
 latestCases['Zip Code'] = latestCases['Zip Code'].astype(int)
 latestCases['Total Cases'] = latestCases['Total Cases'].astype(int)
 
-latestCases.to_csv('TotalCOVIDbyZip.csv')
-
 meanList = []
+medianList = []
 #[rows : columns]
-#loop through rows to calculate mean new cases per day per zip code
+#loop through rows to calculate mean/median new cases per day per zip code
 for x in range(0,len(df1.index)):
     #add values to list
     meanList.append(df1.iloc[x,2:].mean())
-    
+    medianList.append(df1.iloc[x,2:].median())
 
 #add to latest cases
 latestCases.insert(2,'meanNewCases',meanList)
+latestCases.insert(3,'medianNewCases',medianList)
 
+latestCases.to_csv('TotalMeanMedianCOVIDbyZip.csv')
 #Empirical Cumulative Distribution Function
 def ecdf(df):
     n = len(df)
@@ -56,14 +57,41 @@ def ecdf(df):
 #squash and sort data for ECDF plotting
 x_totalCases, y_totalCases = ecdf(latestCases['Total Cases'])
 x_meanCases, y_meanCases = ecdf(latestCases['meanNewCases'])
-
+x_medianCases, y_medianCases = ecdf(latestCases['medianNewCases'])
 #plot ECDF of Mean new cases daily vs total cases
-_ = plt.figure(figsize=(8,4.5))
-_ = plt.plot(x_totalCases,y_totalCases,marker='.',linestyle='none')
-_ = plt.plot(x_meanCases,y_meanCases,marker='.',linestyle='none')
-_ = plt.legend(('Total Reported Cases','Mean New Cases/Day'),loc='lower right')
+_ = plt.figure(figsize=(12,6.75))
+_ = plt.plot(x_totalCases,y_totalCases,marker='.',linestyle='-')
+_ = plt.plot(x_meanCases,y_meanCases,marker='.',linestyle='-')
+_ = plt.plot(x_medianCases,y_medianCases,marker='.',linestyle='-')
+_ = plt.legend(('Total Reported Cases','Mean New Cases/Day','Median New Cases/Day'),loc='lower right')
 
 _ = plt.xlabel('Reported COVID-19 Cases')
 _ = plt.ylabel('ECDF')
 _ = plt.title('ECDF of Baltimore City COVID-19 Cases by Zip Code')
 plt.show()
+
+_ = plt.figure(figsize=(6,8))
+_ = plt.boxplot(x='Total Cases',data=latestCases)
+_ = plt.xticks([1],['Baltimore City Zip Codes'])
+_ = plt.ylabel('Total Reported COVID-19 Cases')
+_ = plt.title('Baltimore COVID-19 Total Cases by Zip Code')
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
