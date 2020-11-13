@@ -25,7 +25,7 @@ df.columns = df.iloc[0]
 
 df = df.rename(columns={'Date':'Zip Code'})
 df = df.drop([0,0])
-
+df.to_csv('COVID_Cleaned_Transposed.csv')
 latestCases = pd.DataFrame()
 
 latestCases['Zip Code'] = df['Zip Code']
