@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pylab import rcParams
 
+#np.corrcoef(x,y)
+
 df = pd.read_csv('COVID_Cleaned.csv')
 df1 = pd.read_csv('Bmore_COVID_NewCasesByDate.csv')
 
@@ -58,40 +60,29 @@ def ecdf(df):
 x_totalCases, y_totalCases = ecdf(latestCases['Total Cases'])
 x_meanCases, y_meanCases = ecdf(latestCases['meanNewCases'])
 x_medianCases, y_medianCases = ecdf(latestCases['medianNewCases'])
+
 #plot ECDF of Mean new cases daily vs total cases
 _ = plt.figure(figsize=(12,6.75))
 _ = plt.plot(x_totalCases,y_totalCases,marker='.',linestyle='-')
 _ = plt.plot(x_meanCases,y_meanCases,marker='.',linestyle='-')
 _ = plt.plot(x_medianCases,y_medianCases,marker='.',linestyle='-')
 _ = plt.legend(('Total Reported Cases','Mean New Cases/Day','Median New Cases/Day'),loc='lower right')
-
 _ = plt.xlabel('Reported COVID-19 Cases')
 _ = plt.ylabel('ECDF')
-_ = plt.title('ECDF of Baltimore City COVID-19 Cases by Zip Code')
+_ = plt.title('ECDF of Baltimore City (Reported) COVID-19 Cases by Zip Code')
 plt.show()
 
+#boxplot of total cases by zip
 _ = plt.figure(figsize=(6,8))
-_ = plt.boxplot(x='Total Cases',data=latestCases)
-_ = plt.xticks([1],['Baltimore City Zip Codes'])
+_ = sns.boxplot(y='Total Cases',data=latestCases[['Zip Code','Total Cases']])
+_ = plt.xlabel('Baltimore City')
 _ = plt.ylabel('Total Reported COVID-19 Cases')
-_ = plt.title('Baltimore COVID-19 Total Cases by Zip Code')
+_ = plt.title('Baltimore COVID-19 Total (Reported) Cases by Zip Code')
 plt.show()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#swarmplot of total cases by zip
+_ = plt.figure(figsize=(6,8))
+_ = sns.swarmplot(y='Total Cases',data=latestCases[['Zip Code','Total Cases']])
+_ = plt.xlabel('Baltimore City')
+_ = plt.title('Baltimore COVID-19 Total (Reported) Cases by Zip Code')
+plt.show()
