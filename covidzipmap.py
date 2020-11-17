@@ -12,8 +12,6 @@ from folium import plugins
 df1 = pd.read_csv('MDCOVID19_MASTER_ZIP_CODE_CASES.csv')
 df2 = pd.read_csv('Vacant_Buildings.csv')
 
-#print(df1)
-
 #filter COVID by bmore zips
 zipsList = [21227,21207,21230,21251,21229,21237,21287,21231,21226,21206,21222,21225,21211,21208,\
             21205,21218,21234,21202,21201,21213,21210,21209,21216,21236,21217,21224,21215,21212,\
@@ -22,8 +20,6 @@ zipsList = [21227,21207,21230,21251,21229,21237,21287,21231,21226,21206,21222,21
 df1 = df1[df1['ZIP_CODE'].isin(zipsList)]
 
 df1 = df1.fillna(0)
-
-#print(df1)
 
 zipsLatest = pd.DataFrame()
 

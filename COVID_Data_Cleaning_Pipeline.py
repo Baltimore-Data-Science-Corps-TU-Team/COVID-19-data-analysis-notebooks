@@ -10,6 +10,7 @@ c2n = pd.read_excel('CSA-to-NSA-2010.xlsx')
 hinc = pd.read_excel('Vital Signs Indicator Median Household Income.xlsx')
 z2c = pd.read_excel('Zip-to-CSA-2010.xls')
 df = pd.read_csv('MDCOVID19_MASTER_ZIP_CODE_CASES.csv')
+census = pd.read_csv('Census_Demographics_2010-2012.csv')
 
 #pipeline raw data -> cleaned rows:dates, columns:zips------------------------
 zipsList = [21227,21207,21230,21251,21229,21237,21287,21231,21226,21206,21222,21225,21211,21208,\
@@ -59,25 +60,30 @@ df.columns = df.iloc[0]
 df = df.rename(columns={'Date':'Zip Code'})
 df1 = df.drop([0,0])
 
-#print(df1)
+print(df1.head())
 df1.to_csv('COVID_Cleaned_Transposed.csv')
 
 
-#pipeline zips, CSAs, NSAs, MHINC, total COVID cases -> one file--------------
+#pipeline zips, CSAs, NSAs, MHINC, CSA pop, total COVID cases -> one file-----
 zipsLatest = pd.DataFrame()
 
 zipsLatest['Zip'] = df1['Zip Code'].astype(int)
 zipsLatest['TotalCOVIDCases'] = df1.iloc[:,-1]
 
+census = census[['CSA2010','tpop10']]
+census = census.rename(columns={'CSA2010':'Community','tpop10':'Pop2010'})
 #rename columns appropriately
 z2c = z2c.rename(columns={'Zip2010':'Zip','CSA2010':'CSA'})
 c2n = c2n.rename(columns={'CSA2010':'Community'})
 
-#merge, rename Household income and CSAs-to-Neighborhoods
+#merge, rename Household income, CSA population, and CSAs-to-Neighborhoods
 df = pd.merge_ordered(hinc, c2n, fill_method='ffill')
+df = pd.merge_ordered(census,df,fill_method='ffill')
 df = df.rename(columns={'2018 Data':'MHINC','NSA2010':'Neigh','Community':'CSA'})
-df = df[['Neigh','CSA','MHINC']]
+df = df[['Neigh','CSA','Pop2010','MHINC']]
 
+df = df.drop([0])
+df.to_csv('test.csv')
 #merge with Zip Codes
 df = pd.merge_ordered(z2c,df,fill_method='ffill')
 
@@ -90,11 +96,11 @@ df['Zip'] = df['Zip'].astype(int)
 
 #merge with latest covid cases
 df = pd.merge_ordered(zipsLatest,df,fill_method='ffill')
-df = df[['Neigh','CSA','Zip','MHINC','TotalCOVIDCases']]
+df = df[['Neigh','CSA','Pop2010','Zip','MHINC','TotalCOVIDCases']]
 
 #export as CSV
 df.to_csv('MASTER_MERGED.csv',index=False)
-#print(df)
+print(df.head())
 
 
 #pipeline COVID_Cleaned_Transposed -> Daily Increase--------------------------
@@ -113,13 +119,11 @@ cc1 = cc.loc[:,'2020-04-11':]\
         .diff(axis=1)\
         .drop(columns='2020-04-11')\
   
-
 dates = cc['Zip Code']
 cc1.insert(0,'Zip Code',dates)    
 
-#cc1['Zip Code'] = cc1['Zip Code'].astype(float).astype(int) 
 cc.to_csv('Bmore_COVID_NewCasesByDate.csv')
-#print(cc)
+print(cc.head())
 
 #pipeline -> Mean, median new cases, total cases
 latestCases = pd.DataFrame()
@@ -127,13 +131,12 @@ latestCases = pd.DataFrame()
 latestCases['Zip Code'] = df1['Zip Code']
 latestCases['Total Cases'] = df1.iloc[:,-1]
 
-#latestCases['Zip Code'] = latestCases['Zip Code'].map(lambda x : x.rstrip('0').rstrip('.'))
 latestCases['Zip Code'] = latestCases['Zip Code'].astype(int)
 latestCases['Total Cases'] = latestCases['Total Cases'].astype(int)
 
 meanList = []
 medianList = []
-#[rows : columns]
+
 #loop through rows to calculate mean/median new cases per day per zip code
 for x in range(0,len(cc.index)):
     #add values to list
@@ -144,5 +147,5 @@ for x in range(0,len(cc.index)):
 latestCases.insert(2,'meanNewCasesPerDay',meanList)
 latestCases.insert(3,'medianNewCasesPerDay',medianList)
 
+print(latestCases.head())
 latestCases.to_csv('TotalMeanMedianCOVIDbyZip.csv')
-print(latestCases)

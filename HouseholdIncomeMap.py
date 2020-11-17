@@ -15,9 +15,6 @@ df = df.rename(columns={'Zip':'zipcode1','Neigh':'LABEL'})
 df['zipcode1'] = df['zipcode1'].astype(str)
 
 baltMap = folium.Map(location=[39.2904,-76.6122], tiles='OpenStreetMap', zoom_start=13)
-#folium.GeoJson('zipcode.geojson').add_to(baltMap)
-#folium.GeoJson('Maryland_Baltimore_City_Neighborhoods.geojson').add_to(baltMap)
-
 
 covid_choro = folium.Choropleth(geo_data='zipcode.geojson', geo_path='zipcode.geojson',\
                    data=df, columns=['zipcode1','TotalCOVIDCases'],\
