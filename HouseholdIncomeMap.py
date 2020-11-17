@@ -36,3 +36,7 @@ covid_choro.geojson.add_child(folium.features.GeoJsonTooltip(['zipcode1','zipnam
 
 folium.LayerControl().add_to(baltMap)
 baltMap.save('COVID_MHINC.html')
+
+
+
+    
